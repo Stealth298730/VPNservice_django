@@ -61,6 +61,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Accounts',
     'WindScribe',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount'
+
     
 ]
 
@@ -70,6 +74,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -109,6 +114,14 @@ DATABASES = {
     }
 }
 
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "vpn-service",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

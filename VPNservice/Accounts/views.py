@@ -6,6 +6,8 @@ from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.contrib import messages
+from django.core.cache import cache
+from django.views.decorators.http import require_GET,require_POST
 
 
 from .forms import ProfileForm,UserForm
@@ -50,12 +52,35 @@ def logout_user(request:HttpRequest):
 
 
 @login_required
-def profile(request:HttpRequest):
-    user_form=UserForm(data=request.POST or None,instance=request.user)
+@require_GET
+def profile_get(request:HttpRequest):
+    user_form=cache.get(f"user_form{request.user.username}")
+    profile_form=cache.get(f"profile_form{request.user.username}")
+
+    if not user_form:
+        user_form = UserForm(instance=request.user)
+        cache.set(f"user_form{request.user.username}",user_form,30)
+
+
+    if not profile_form:
+        profile_form = ProfileForm(instance=request.user.details)
+        cache.set(f"user_form{request.user.username}",profile_form,30)
+
+    return render(request,"profile.html",context=dict(user_form=user_form,profile_form=profile_form))
+
+
+
+@login_required
+@require_POST
+def profile_post(request:HttpRequest):
+    user_form=UserForm(data=request.POST ,instance=request.user)
     profile_form=ProfileForm(data=request.POST,files=request.FILES,instance=request.user.details)
-    if (request.method == "POST" and user_form.changed_data) or (request.method == "POST" and profile_form.changed_data):
+
+    if user_form.changed_data:
         user_form.save()
+
+    if profile_form.changed_data:
         profile_form.save()
+
         messages.info(request,"Дані успішно оновлені")
         return redirect("profile")
-    return render(request,"profile.html",context=dict(user_form=user_form,profile_form=profile_form))
