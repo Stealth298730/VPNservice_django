@@ -8,7 +8,7 @@ from django.http import HttpRequest
 from django.contrib import messages
 from django.core.cache import cache
 from django.views.decorators.http import require_GET,require_POST
-
+from django.views.decorators.cache import cache_page
 
 from .forms import ProfileForm,UserForm
 from .models import Profile
@@ -53,18 +53,23 @@ def logout_user(request:HttpRequest):
 
 @login_required
 @require_GET
+@cache_page(30)
 def profile_get(request:HttpRequest):
-    user_form=cache.get(f"user_form{request.user.username}")
-    profile_form=cache.get(f"profile_form{request.user.username}")
+    #user=cache.get(f"user_form{request.user.username}")
+    #profile=cache.get(f"profile_form{request.user.username}")
 
-    if not user_form:
-        user_form = UserForm(instance=request.user)
-        cache.set(f"user_form{request.user.username}",user_form,30)
+    #if not user:
+        #user = request.user
+        #cache.set(f"user_form{request.user.username}",user,30)
 
 
-    if not profile_form:
-        profile_form = ProfileForm(instance=request.user.details)
-        cache.set(f"user_form{request.user.username}",profile_form,30)
+    #if not profile:
+        #profile = request.user.details
+        #cache.set(f"profile_form{request.user.username}",profile,30)
+
+    user_form = UserForm(instance=request.user)
+    profile_form = ProfileForm(instance=request.user.details)
+   
 
     return render(request,"profile.html",context=dict(user_form=user_form,profile_form=profile_form))
 
@@ -83,4 +88,4 @@ def profile_post(request:HttpRequest):
         profile_form.save()
 
         messages.info(request,"Дані успішно оновлені")
-        return redirect("profile")
+    return redirect("profile")

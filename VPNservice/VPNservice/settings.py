@@ -23,10 +23,10 @@ load_dotenv(    )
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_PATH = BASE_DIR / "media"
 MEDIA_URL = "/media/"
-LOGIN_URL = "/accounts/login/"
+LOGIN_URL = "/sign_in/"
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/accounts/' # Перенаправляти на головну сторінку
+LOGIN_REDIRECT_URL = '/' # Перенаправляти на головну сторінку
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -63,7 +63,8 @@ INSTALLED_APPS = [
     'WindScribe',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount'
+    'allauth.socialaccount',
+    'captcha',
 
     
 ]
@@ -118,8 +119,8 @@ DATABASES = {
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "vpn-service",
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://default:0iNnd2Ng9mfu0Z4QgxxDf5jPFmb1sWrB@redis-12235.crce218.eu-central-1-1.ec2.cloud.redislabs.com:12235",
     }
 }
 

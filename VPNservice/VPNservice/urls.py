@@ -23,6 +23,6 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path("user_accounts/",include("Accounts.urls")),
+    path("",include("Accounts.urls")),
     path("wind-scribe/",include("WindScribe.urls"))    
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_PATH)

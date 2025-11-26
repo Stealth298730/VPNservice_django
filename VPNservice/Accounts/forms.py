@@ -26,9 +26,9 @@ class ProfileForm(forms.ModelForm):
     bio = forms.CharField(widget=forms.Textarea(attrs={"class":"form-control"}),required=False)
     phone_number = forms.CharField(max_length=18,widget=forms.TextInput(attrs={"class":"form-control"}),required=False)
 
-class Meta:
-    model = Profile
-    exclude = ["user"]
+    class Meta:
+        model = Profile
+        exclude = ["user"]
 
 class UserForm(forms.ModelForm):
     first_name=forms.CharField(max_length=50 ,widget=forms.TextInput(attrs={"class":"form-control"}),required=False)
