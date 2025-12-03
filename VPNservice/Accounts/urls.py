@@ -8,6 +8,6 @@ urlpatterns = [
     path("sign_in/",views.sign_in,name="sign_in"),
     path("profile-post/",views.profile_post,name="profile_post"),   
     path("profile/",views.profile_get,name="profile"),   
-    path("logout/",views.logout_user,name="logout"),   
-
+    path("logout/",views.logout_user,name="logout"),
+    path("api/user/",views.test_api),   
 ]

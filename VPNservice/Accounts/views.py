@@ -10,6 +10,10 @@ from django.core.cache import cache
 from django.views.decorators.http import require_GET,require_POST
 from django.views.decorators.cache import cache_page
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import ProfileSerializer
+
 from .forms import ProfileForm,UserForm
 from .models import Profile
 # Create your views here.
@@ -81,11 +85,25 @@ def profile_post(request:HttpRequest):
     user_form=UserForm(data=request.POST ,instance=request.user)
     profile_form=ProfileForm(data=request.POST,files=request.FILES,instance=request.user.details)
 
-    if user_form.changed_data:
-        user_form.save()
 
-    if profile_form.changed_data:
-        profile_form.save()
-
+    if profile_form.is_valid():
         messages.info(request,"Дані успішно оновлені")
+
+        if user_form.changed_data:
+            user_form.save()
+
+        if profile_form.changed_data:
+            profile_form.save()
+
+    else:
+        messages.error(request,"Невірна")
+
+    
     return redirect("profile")
+
+
+@api_view(["GET"])
+def test_api(request:HttpRequest):
+    profile=Profile.objects.get(user=request.user)
+    data = ProfileSerializer(profile)
+    return Response(data.data)
