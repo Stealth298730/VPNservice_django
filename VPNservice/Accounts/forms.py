@@ -18,7 +18,12 @@ class SignUpForm(UserCreationForm):
 class LoginForm(AuthenticationForm):
     username = forms.CharField(max_length=20,widget=forms.TextInput(attrs={"class":"form-control"}))
     password = forms.CharField(max_length=50,widget=forms.PasswordInput(attrs={"class":"form-control"}))
-    remember = forms.CharField(widget=forms.CheckboxInput(attrs={"class":"form-control"}))
+    remember = forms.BooleanField(
+        widget=forms.CheckboxInput(attrs={"class":"form-check-input"}),
+        initial=False,
+        label="Запам'ятати мене",
+        required=False  
+    )
 
 
 class ProfileForm(forms.ModelForm):

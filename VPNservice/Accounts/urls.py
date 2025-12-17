@@ -9,5 +9,6 @@ urlpatterns = [
     path("profile-post/",views.profile_post,name="profile_post"),   
     path("profile/",views.profile_get,name="profile"),   
     path("logout/",views.logout_user,name="logout"),
-    path("api/user/",views.test_api),   
+    path("api/user/",views.test_api),
+ 
 ]

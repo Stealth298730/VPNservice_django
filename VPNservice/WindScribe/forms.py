@@ -3,9 +3,10 @@ from django import forms
 from .models import Subscription
 
 
-class Subform(forms.ModelForm):
-    sub = forms.ChoiceField(
-        choices = Subscription,
+class SubForm(forms.Form):
+    sub = forms.ModelChoiceField(
+        queryset=Subscription.objects.all(),
         label="Виберіть підписку",
-        attrs=forms.RadioSelect(attrs={})
+        widget=forms.Select(attrs={"class":"form-control"}),
+        empty_label=""
         )

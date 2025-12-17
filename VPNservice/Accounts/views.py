@@ -1,35 +1,37 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import SignUpForm
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest
+from django.http import HttpRequest,JsonResponse
 from django.contrib import messages
 from django.core.cache import cache
 from django.views.decorators.http import require_GET,require_POST
 from django.views.decorators.cache import cache_page
-
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializers import ProfileSerializer
 
-from .forms import ProfileForm,UserForm
+from .forms import ProfileForm,UserForm,SignUpForm,LoginForm 
 from .models import Profile
 # Create your views here.
 
 
 def sign_up(request:HttpRequest):
     form = SignUpForm(data=request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        messages.success(request=request,message="Реєстрація успішна")
-        return redirect("sign_in")
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+        #messages.success(request=request,message="Реєстрація успішна")
+        #return redirect("sign_in")
+            return JsonResponse(dict(status="success"),status = 200)
+        else:
+            return JsonResponse(dict(status ="errors",errors = form.errors),status = 400)
     return render(request,"sign_up.html",dict(form=form))
 
 
 def sign_in(request:HttpRequest):
-    form = AuthenticationForm(request,data=request.POST or None)
+    form = LoginForm(request,data=request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = authenticate(
             username=form.cleaned_data["username"],
@@ -40,6 +42,11 @@ def sign_in(request:HttpRequest):
             return redirect("sign_in")
         
         login(request=request,user=user)
+        if form.cleaned_data.get("remember"):
+            request.session.set_expiry(None)
+        else:
+            print("Не пам'ятати")
+            request.session.set_expiry(0)
         return redirect("index")
     return render(request,"sign_in.html",dict(form=form))
 

@@ -31,4 +31,5 @@ urlpatterns = [
     path("wind-scribe/",include("WindScribe.urls")),
     path("captcha/",include("captcha.urls")),
     path("api/",include(router.urls)),
+    
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
