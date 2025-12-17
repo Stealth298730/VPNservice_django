@@ -25,6 +25,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 LOGIN_URL = "/sign_in/"
 SITE_ID = 1
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -85,7 +86,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',+
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
