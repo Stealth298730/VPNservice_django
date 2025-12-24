@@ -16,6 +16,7 @@ import os
 
 from pymysql import install_as_MySQLdb
 from dotenv import load_dotenv
+import dj_database_url
 
 install_as_MySQLdb()
 load_dotenv(    )
@@ -124,14 +125,11 @@ WSGI_APPLICATION = 'VPNservice.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE':os.getenv("ENGINE"),
-        'NAME': os.getenv("NAME"),
-        'HOST':os.getenv("HOST"),
-        'PORT':os.getenv("PORT"),
-        'USER':os.getenv("USER_DB"),
-        'PASSWORD':os.getenv("PASSWORD")
-    }
+    'default':dj_database_url.config(
+    default=os.getenv("DATABASES_URL"),
+    conn_max_age=600,
+    conn_health_checks=True,
+)
 }
 
 
